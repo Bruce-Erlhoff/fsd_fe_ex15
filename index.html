@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React Digital Clock</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+    <style>
+      .container-custom {
+        border-color: blue;
+        border-style: solid;
+        border-width: 2px;
+      }
+      .p-1 {
+        font-size: medium;
+        color: blue;
+        font-weight: bold;
+      }
+      .p-2 {
+        font-size: medium;
+        color: red;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container bg-light container-custom">
+      <h1>Digital Clock</h1>
+      <br />
+      <br />
+
+      <h6>
+        The example below uses innerHTML to build the date string and form
+      </h6>
+      <p>
+        <i
+          >Notice that the form gets refreshed every second upon rendering the
+          div containing both the form and date string. This is not good because
+          anything you type into the form is cleared.</i
+        >
+      </p>
+
+      <div id="regulardiv"></div>
+      <br /><br />
+      <h6>The example below uses React to build the date string and form</h6>
+      <p>
+        <i
+          >Notice that the form data is not cleared, because React compares the
+          virtual DOM with the actual DOM, and knows the form data has not
+          changed, therefore not updated. But since the Date string changes
+          every second, it is updated.</i
+        >
+      </p>
+      <div id="reactdiv"></div>
+
+      <script>
+        let regulardiv = document.getElementById("regulardiv");
+        let reactDiv = ReactDOM.createRoot(document.getElementById("reactdiv"));
+
+        // render both divs
+        let render = () => {
+          //regular div. Construct the HTML element string, and set Div's innerHTML
+          // Notice that it renders every second the input field also (not good)
+          regulardiv.innerHTML = `<input/> <p class="p-2"> ${new Date()} </p>`;
+
+          //using react
+          // 1. create the element
+          // 2. get the root
+          // 3. render
+          // let dateElem = React.createElement('p',{},(new Date()).toString());
+
+          // Notice that input field is not updated but the "p" element is updated.
+          // React compares the virtual DOM with real DOM and only updates what changed.
+          // the p field is updated with the changing Date, but the input field didnt change, therefore didnt update.
+
+          let dateElem = React.createElement("div", {}, [
+            React.createElement("input", {}, null),
+            React.createElement(
+              "p",
+              { className: "p-1" },
+              new Date().toString()
+            ),
+          ]);
+
+          reactDiv.render(dateElem);
+        };
+        setInterval(render, 1000); // parameters - function name and milliseconds
+      </script>
+    </div>
+  </body>
+</html>
